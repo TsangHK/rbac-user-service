@@ -27,16 +27,14 @@ import java.util.Objects;
 public class GlobalExceptionHandler {
 
     // 日志
-    private static final Logger log =
-            LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
 
     /**
      * 处理业务异常
      */
     @ExceptionHandler(BusinessException.class)
-    public Result businessException(
-            BusinessException e){
+    public Result businessException(BusinessException e){
         return Result.error(e.getMessage());
     }
 
@@ -45,8 +43,7 @@ public class GlobalExceptionHandler {
      * 处理认证失败异常，返回真实的 HTTP 401
      */
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<Result> unauthorizedException(
-            UnauthorizedException e){
+    public ResponseEntity<Result> unauthorizedException(UnauthorizedException e){
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(Result.error(
@@ -63,8 +60,7 @@ public class GlobalExceptionHandler {
      * 把客户端的错误伪装成服务端故障
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Result> messageNotReadableException(
-            HttpMessageNotReadableException e){
+    public ResponseEntity<Result> messageNotReadableException(HttpMessageNotReadableException e){
         log.warn("请求体解析失败：{}", e.getMessage());
 
         return ResponseEntity
@@ -80,8 +76,7 @@ public class GlobalExceptionHandler {
      * 处理访问不存在的路径，返回真实的 HTTP 404
      */
     @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Result> noResourceFoundException(
-            NoResourceFoundException e){
+    public ResponseEntity<Result> noResourceFoundException(NoResourceFoundException e){
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Result.error(
@@ -95,16 +90,10 @@ public class GlobalExceptionHandler {
      * 处理参数校验异常
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Result validateException(
-            MethodArgumentNotValidException e){
-        FieldError fieldError =
-                e.getBindingResult()
-                        .getFieldError();
+    public Result validateException(MethodArgumentNotValidException e){
+        FieldError fieldError = e.getBindingResult().getFieldError();
 
-        String message =
-                fieldError != null
-                        ? fieldError.getDefaultMessage()
-                        : "参数不合法";
+        String message = fieldError != null ? fieldError.getDefaultMessage() : "参数不合法";
 
         return Result.error(message);
     }
@@ -114,8 +103,7 @@ public class GlobalExceptionHandler {
      * 处理数据冲突异常（如新增时登录账号已存在）
      */
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public Result dataIntegrityException(
-            DataIntegrityViolationException e){
+    public Result dataIntegrityException(DataIntegrityViolationException e){
         log.warn("数据完整性冲突：{}", e.getMessage());
 
         return Result.error("数据冲突：登录账号可能已存在");
@@ -126,8 +114,7 @@ public class GlobalExceptionHandler {
      * 处理查询参数（@RequestParam）上的校验失败
      */
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public Result requestParamException(
-            HandlerMethodValidationException e){
+    public Result requestParamException(HandlerMethodValidationException e){
         String message =
                 e.getAllValidationResults()
                         .stream()
@@ -146,8 +133,7 @@ public class GlobalExceptionHandler {
      * 处理账号重复导致的数据异常
      */
     @ExceptionHandler(TooManyResultsException.class)
-    public Result tooManyResultsException(
-            TooManyResultsException e){
+    public Result tooManyResultsException(TooManyResultsException e){
         log.error("账号存在重复数据", e);
 
         return Result.error("账号数据异常：存在重复的登录账号，请联系管理员处理");

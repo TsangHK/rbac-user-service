@@ -7,12 +7,9 @@ import org.springframework.boot.diagnostics.FailureAnalysis;
 /**
  * 配置缺失的启动失败提示
  */
-public class ConfigurationFailureAnalyzer
-        extends AbstractFailureAnalyzer<ConfigurationException> {
+public class ConfigurationFailureAnalyzer extends AbstractFailureAnalyzer<ConfigurationException> {
     @Override
-    protected FailureAnalysis analyze(
-            Throwable rootFailure,
-            ConfigurationException cause) {
+    protected FailureAnalysis analyze(Throwable rootFailure, ConfigurationException cause) {
         // cause为null时不处理，交给默认逻辑
         if (cause == null) {
             return null;
@@ -29,7 +26,6 @@ public class ConfigurationFailureAnalyzer
                         命令行：export DB_PASSWORD=... JWT_SECRET=...（Windows 用 set）
                         也可以写进不进git的 application-local.properties，
                         详见README「配置环境变量」一节""",
-                cause
-        );
+                cause);
     }
 }

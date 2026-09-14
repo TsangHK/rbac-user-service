@@ -16,11 +16,7 @@ public class LoginVO {
     // 用户权限
     private List<String> permissions;
 
-    public LoginVO(
-            String token,
-            UserInfo userInfo,
-            List<String> permissions
-    ) {
+    public LoginVO(String token, UserInfo userInfo, List<String> permissions) {
         this.token = token;
 
         this.userInfo = userInfo;
@@ -66,11 +62,7 @@ public class LoginVO {
         // 登录账号
         private String username;
 
-        public UserInfo(
-                Integer id,
-                String name,
-                String username
-        ) {
+        public UserInfo(Integer id, String name, String username) {
             this.id = id;
 
             this.name = name;

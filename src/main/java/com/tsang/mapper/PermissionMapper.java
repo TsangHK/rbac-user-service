@@ -8,6 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  * 权限表数据库操作
  */
 @Mapper
-public interface PermissionMapper
-        extends BaseMapper<Permission> {
+public interface PermissionMapper extends BaseMapper<Permission> {
 }

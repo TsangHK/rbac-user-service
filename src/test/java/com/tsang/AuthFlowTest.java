@@ -40,11 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthFlowTest {
 
     // 测试密钥（仅测试用）
-    private static final String SECRET =
-            "integration-test-secret-key-1234567890";
+    private static final String SECRET = "integration-test-secret-key-1234567890";
 
-    private final JwtUtils jwtUtils =
-            new JwtUtils(new JwtProperties(SECRET, 24 * 60 * 60 * 1000));
+    private final JwtUtils jwtUtils = new JwtUtils(new JwtProperties(SECRET, 24 * 60 * 60 * 1000));
 
     private final UserService userService = mock(UserService.class);
 
@@ -93,11 +91,9 @@ class AuthFlowTest {
 
     @Test
     void 登录成功返回Token和权限() throws Exception {
-        when(userService.login("admin", "123456"))
-                .thenReturn(mockUser());
+        when(userService.login("admin", "123456")).thenReturn(mockUser());
 
-        when(permissionService.getPermissionCodes(1))
-                .thenReturn(List.of("user:list"));
+        when(permissionService.getPermissionCodes(1)).thenReturn(List.of("user:list"));
 
         openMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)
@@ -154,8 +150,7 @@ class AuthFlowTest {
 
     @Test
     void 有权限可以访问() throws Exception {
-        when(userService.page(any(), any(), any(), any()))
-                .thenReturn(new Page<>(1, 10));
+        when(userService.page(any(), any(), any(), any())).thenReturn(new Page<>(1, 10));
 
         mvc.perform(get("/page")
                         .param("page", "1")
@@ -202,8 +197,7 @@ class AuthFlowTest {
                         .content("""
                                 {"id":1,"age":20,"username":"admin"}
                                 """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("姓名不能为空"));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("姓名不能为空"));
     }
 
     @Test
@@ -216,20 +210,16 @@ class AuthFlowTest {
                         .content("""
                                 {"name":"张三","age":20,"username":"zhangsan","password":"123456"}
                                 """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.code").value(200));
 
-        ArgumentCaptor<User> captor =
-                ArgumentCaptor.forClass(User.class);
+        ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
         verify(userService).add(captor.capture());
 
         // 入参里带了密码，反序列化没有把它丢掉
-        assertThat(captor.getValue().getPassword())
-                .isEqualTo("123456");
+        assertThat(captor.getValue().getPassword()).isEqualTo("123456");
 
-        assertThat(captor.getValue().getUsername())
-                .isEqualTo("zhangsan");
+        assertThat(captor.getValue().getUsername()).isEqualTo("zhangsan");
     }
 
     /**
@@ -243,8 +233,7 @@ class AuthFlowTest {
                         .content("""
                                 {"name":"张三","age":20,"username":"zhangsan"}
                                 """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("密码不能为空"));
+                .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("密码不能为空"));
 
         verify(userService, never()).add(any(User.class));
     }
@@ -269,8 +258,7 @@ class AuthFlowTest {
      */
     @Test
     void 登录时账号重复返回明确提示() throws Exception {
-        when(userService.login(any(), any()))
-                .thenThrow(new TooManyResultsException("found: 2"));
+        when(userService.login(any(), any())).thenThrow(new TooManyResultsException("found: 2"));
 
         openMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)

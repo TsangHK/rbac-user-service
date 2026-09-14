@@ -41,11 +41,7 @@ class PermissionServiceImplTest {
     @Test
     void 多角色的权限合并返回() {
         // 用户同时拥有角色100和角色101
-        when(userRoleMapper.selectList(any()))
-                .thenReturn(List.of(
-                        userRole(1, 100),
-                        userRole(1, 101)
-                ));
+        when(userRoleMapper.selectList(any())).thenReturn(List.of(userRole(1, 100), userRole(1, 101)));
 
         // 角色100：权限200、201；角色101：权限202
         when(rolePermissionMapper.selectList(any()))
@@ -64,14 +60,12 @@ class PermissionServiceImplTest {
 
         List<String> codes = permissionService.getPermissionCodes(1);
 
-        assertThat(codes).containsExactlyInAnyOrder(
-                "user:list", "user:add", "user:update");
+        assertThat(codes).containsExactlyInAnyOrder("user:list", "user:add", "user:update");
     }
 
     @Test
     void 用户没有角色时返回空() {
-        when(userRoleMapper.selectList(any()))
-                .thenReturn(List.of());
+        when(userRoleMapper.selectList(any())).thenReturn(List.of());
 
         assertThat(permissionService.getPermissionCodes(99)).isEmpty();
 

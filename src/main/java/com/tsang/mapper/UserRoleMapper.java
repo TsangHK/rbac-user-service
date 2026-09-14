@@ -8,6 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  * 用户角色关联表数据库操作
  */
 @Mapper
-public interface UserRoleMapper
-        extends BaseMapper<UserRole> {
+public interface UserRoleMapper extends BaseMapper<UserRole> {
 }

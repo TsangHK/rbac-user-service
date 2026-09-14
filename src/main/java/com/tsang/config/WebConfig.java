@@ -14,9 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
     // JWT拦截器
     private final JwtInterceptor jwtInterceptor;
 
-    public WebConfig(
-            JwtInterceptor jwtInterceptor
-    ) {
+    public WebConfig(JwtInterceptor jwtInterceptor) {
         this.jwtInterceptor = jwtInterceptor;
     }
 
@@ -24,9 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
      * 注册拦截器
      */
     @Override
-    public void addInterceptors(
-            InterceptorRegistry registry
-    ) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(
                         jwtInterceptor
                 )
@@ -35,10 +31,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
 
                 // 放行登录接口、健康检查
-                .excludePathPatterns(
-                        "/login",
-                        "/actuator/health",
-                        "/actuator/health/**"
-                );
+                .excludePathPatterns("/login", "/actuator/health", "/actuator/health/**");
     }
 }

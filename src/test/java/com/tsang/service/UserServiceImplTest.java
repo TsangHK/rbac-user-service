@@ -76,13 +76,9 @@ class UserServiceImplTest {
         verify(userMapper).insert(captor.capture());
 
         // 入库的是密文，且能和明文匹配
-        assertThat(captor.getValue().getPassword())
-                .isNotEqualTo("123456");
+        assertThat(captor.getValue().getPassword()).isNotEqualTo("123456");
 
-        assertThat(PasswordUtils.matches(
-                "123456",
-                captor.getValue().getPassword()))
-                .isTrue();
+        assertThat(PasswordUtils.matches("123456", captor.getValue().getPassword())).isTrue();
     }
 
     /**

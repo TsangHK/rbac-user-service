@@ -10,8 +10,7 @@ public class PasswordUtils {
     /**
      * BCrypt加密器
      */
-    private static final BCryptPasswordEncoder encoder =
-            new BCryptPasswordEncoder();
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     /**
      * 密码加密
@@ -23,13 +22,7 @@ public class PasswordUtils {
     /**
      * 密码校验
      */
-    public static boolean matches(
-            String rawPassword,
-            String encodePassword
-    ) {
-        return encoder.matches(
-                rawPassword,
-                encodePassword
-        );
+    public static boolean matches(String rawPassword, String encodePassword) {
+        return encoder.matches(rawPassword, encodePassword);
     }
 }

@@ -8,6 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
  * 角色权限关联表数据库操作
  */
 @Mapper
-public interface RolePermissionMapper
-        extends BaseMapper<RolePermission> {
+public interface RolePermissionMapper extends BaseMapper<RolePermission> {
 }

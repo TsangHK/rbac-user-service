@@ -16,8 +16,7 @@ import java.util.List;
  * 权限业务实现
  */
 @Service
-public class PermissionServiceImpl
-        implements PermissionService {
+public class PermissionServiceImpl implements PermissionService {
     // 用户角色关系表
     @Resource
     private UserRoleMapper userRoleMapper;
@@ -47,10 +46,7 @@ public class PermissionServiceImpl
             return List.of();
         }
 
-        List<Integer> roleIds =
-                userRoles.stream()
-                        .map(UserRole::getRoleId)
-                        .toList();
+        List<Integer> roleIds = userRoles.stream().map(UserRole::getRoleId).toList();
 
         // 第二步：查询这些角色关联的所有权限ID（去重）
         List<Integer> permissionIds =
@@ -69,9 +65,6 @@ public class PermissionServiceImpl
         }
 
         // 第三步：批量查询权限，取出编码
-        return permissionMapper.selectByIds(permissionIds)
-                .stream()
-                .map(Permission::getCode)
-                .toList();
+        return permissionMapper.selectByIds(permissionIds).stream().map(Permission::getCode).toList();
     }
 }

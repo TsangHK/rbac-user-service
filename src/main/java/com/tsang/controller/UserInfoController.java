@@ -27,12 +27,10 @@ public class UserInfoController {
     @GetMapping("/info")
     public Result info(HttpServletRequest request) {
         // 从JWT拦截器放入的属性中取当前用户ID
-        Integer userId =
-                (Integer) request.getAttribute("userId");
+        Integer userId = (Integer) request.getAttribute("userId");
 
         // 根据ID查询最新的用户信息
-        User user =
-                userService.findById(userId);
+        User user = userService.findById(userId);
 
         // 用户不存在时抛出业务异常
         if (user == null) {

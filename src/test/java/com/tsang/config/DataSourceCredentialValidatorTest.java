@@ -23,8 +23,7 @@ class DataSourceCredentialValidatorTest {
 
     @Test
     void 密码为空串时启动失败() {
-        MockEnvironment environment = new MockEnvironment()
-                .withProperty("spring.datasource.password", "");
+        MockEnvironment environment = new MockEnvironment().withProperty("spring.datasource.password", "");
 
         assertThatThrownBy(() ->
                 new DataSourceCredentialValidator(environment))
@@ -37,8 +36,6 @@ class DataSourceCredentialValidatorTest {
         MockEnvironment environment = new MockEnvironment()
                 .withProperty("spring.datasource.password", "some-password");
 
-        assertThatCode(() ->
-                new DataSourceCredentialValidator(environment))
-                .doesNotThrowAnyException();
+        assertThatCode(() -> new DataSourceCredentialValidator(environment)).doesNotThrowAnyException();
     }
 }

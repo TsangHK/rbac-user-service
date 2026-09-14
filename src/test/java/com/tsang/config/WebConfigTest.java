@@ -17,20 +17,15 @@ class WebConfigTest {
 
     @Test
     void 登录接口与健康检查被放行() {
-        InterceptorRegistry registry =
-                mock(InterceptorRegistry.class);
+        InterceptorRegistry registry = mock(InterceptorRegistry.class);
 
-        InterceptorRegistration registration =
-                mock(InterceptorRegistration.class);
+        InterceptorRegistration registration = mock(InterceptorRegistration.class);
 
-        when(registry.addInterceptor(any()))
-                .thenReturn(registration);
+        when(registry.addInterceptor(any())).thenReturn(registration);
 
-        when(registration.addPathPatterns(any(String[].class)))
-                .thenReturn(registration);
+        when(registration.addPathPatterns(any(String[].class))).thenReturn(registration);
 
-        WebConfig webConfig =
-                new WebConfig(mock(JwtInterceptor.class));
+        WebConfig webConfig = new WebConfig(mock(JwtInterceptor.class));
 
         webConfig.addInterceptors(registry);
 
@@ -38,10 +33,6 @@ class WebConfigTest {
         verify(registration).addPathPatterns("/**");
 
         // 放行登录接口、健康检查
-        verify(registration).excludePathPatterns(
-                "/login",
-                "/actuator/health",
-                "/actuator/health/**"
-        );
+        verify(registration).excludePathPatterns("/login", "/actuator/health", "/actuator/health/**");
     }
 }

@@ -64,12 +64,10 @@ class ApplicationIntegrationTest {
                 );
 
         // user只有查询权限
-        assertThat(permissionService.getPermissionCodes(101))
-                .containsExactly("user:list");
+        assertThat(permissionService.getPermissionCodes(101)).containsExactly("user:list");
 
         // 没有角色的用户返回空列表
-        assertThat(permissionService.getPermissionCodes(999))
-                .isEmpty();
+        assertThat(permissionService.getPermissionCodes(999)).isEmpty();
     }
 
     /**
@@ -112,8 +110,7 @@ class ApplicationIntegrationTest {
                         .content("""
                                 {"username":"admin","password":"wrong"}
                                 """))
-                .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value(401));
+                .andExpect(status().isUnauthorized()).andExpect(jsonPath("$.code").value(401));
     }
 
     /**
@@ -152,10 +149,7 @@ class ApplicationIntegrationTest {
                         .content("""
                                 {"username":"%s","password":"%s"}
                                 """.formatted(username, password)))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 
         return JsonPath.<String>read(body, "$.data.token");
     }

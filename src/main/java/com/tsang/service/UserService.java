@@ -53,10 +53,7 @@ public interface UserService {
      * @param age  年龄精确匹配，null时不过滤
      * @return 分页结果（记录列表 + 总条数 + 页码信息）
      */
-    Page<User> page(Integer page,
-                    Integer size,
-                    String name,
-                    Integer age);
+    Page<User> page(Integer page, Integer size, String name, Integer age);
 
     /**
      * 登录校验

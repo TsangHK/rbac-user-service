@@ -43,11 +43,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 入库前先做BCrypt加密
-        user.setPassword(
-                PasswordUtils.encode(
-                        user.getPassword()
-                )
-        );
+        user.setPassword(PasswordUtils.encode(user.getPassword()));
 
         // insert返回受影响行数，大于0即成功
         return userMapper.insert(user) > 0;
@@ -75,39 +71,21 @@ public class UserServiceImpl implements UserService {
      * 分页 + 条件查询
      */
     @Override
-    public Page<User> page(
-            Integer page,
-            Integer size,
-            String name,
-            Integer age
-    ) {
+    public Page<User> page(Integer page, Integer size, String name, Integer age) {
         // 分页对象：当前页码 + 每页条数
-        Page<User> pageInfo =
-                new Page<>(page, size);
+        Page<User> pageInfo = new Page<>(page, size);
 
         // 条件构造器：用来动态拼接WHERE
-        LambdaQueryWrapper<User> wrapper =
-                new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
 
         // 姓名模糊查询：name有值才拼接
-        wrapper.like(
-                name != null && !name.trim().isEmpty(),
-                User::getName,
-                name
-        );
+        wrapper.like(name != null && !name.trim().isEmpty(), User::getName, name);
 
         // 年龄精确查询：age不为null才拼接
-        wrapper.eq(
-                age != null,
-                User::getAge,
-                age
-        );
+        wrapper.eq(age != null, User::getAge, age);
 
         // 分页查询：分页插件改写成LIMIT并执行COUNT
-        userMapper.selectPage(
-                pageInfo,
-                wrapper
-        );
+        userMapper.selectPage(pageInfo, wrapper);
 
         return pageInfo;
     }
@@ -116,21 +94,13 @@ public class UserServiceImpl implements UserService {
      * 登录校验
      */
     @Override
-    public User login(
-            String username,
-            String password
-    ) {
+    public User login(String username, String password) {
         // 第一步：根据用户名查询用户
-        LambdaQueryWrapper<User> wrapper =
-                new LambdaQueryWrapper<>();
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
 
-        wrapper.eq(
-                User::getUsername,
-                username
-        );
+        wrapper.eq(User::getUsername, username);
 
-        User user =
-                userMapper.selectOne(wrapper);
+        User user = userMapper.selectOne(wrapper);
 
         // 用户不存在
         if (user == null) {
@@ -138,11 +108,7 @@ public class UserServiceImpl implements UserService {
         }
 
         // 第二步：BCrypt校验密码
-        boolean result =
-                PasswordUtils.matches(
-                        password,
-                        user.getPassword()
-                );
+        boolean result = PasswordUtils.matches(password, user.getPassword());
 
         // 密码错误
         if (!result) {

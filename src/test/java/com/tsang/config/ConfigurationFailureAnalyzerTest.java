@@ -11,8 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ConfigurationFailureAnalyzerTest {
 
-    private final ConfigurationFailureAnalyzer analyzer =
-            new ConfigurationFailureAnalyzer();
+    private final ConfigurationFailureAnalyzer analyzer = new ConfigurationFailureAnalyzer();
 
     @Test
     void 数据库密码缺失输出说明块() {
@@ -23,12 +22,10 @@ class ConfigurationFailureAnalyzerTest {
         assertThat(analysis).isNotNull();
 
         // 具体原因
-        assertThat(analysis.getDescription())
-                .contains("DB_PASSWORD");
+        assertThat(analysis.getDescription()).contains("DB_PASSWORD");
 
         // 告诉用户该怎么做
-        assertThat(analysis.getAction())
-                .contains("DB_PASSWORD", "JWT_SECRET");
+        assertThat(analysis.getAction()).contains("DB_PASSWORD", "JWT_SECRET");
     }
 
     @Test
@@ -46,7 +43,6 @@ class ConfigurationFailureAnalyzerTest {
      */
     @Test
     void 非配置异常不处理() {
-        assertThat(analyzer.analyze(new IllegalStateException("其它异常")))
-                .isNull();
+        assertThat(analyzer.analyze(new IllegalStateException("其它异常"))).isNull();
     }
 }

@@ -17,8 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class JwtUtilsTest {
 
     // 测试密钥（仅测试用）
-    private static final String SECRET =
-            "unit-test-secret-key-1234567890abcdef";
+    private static final String SECRET = "unit-test-secret-key-1234567890abcdef";
 
     private JwtUtils newJwtUtils(long expirationMs) {
         return new JwtUtils(new JwtProperties(SECRET, expirationMs));
@@ -28,18 +27,13 @@ class JwtUtilsTest {
     void 创建并解析Token() {
         JwtUtils jwtUtils = newJwtUtils(24 * 60 * 60 * 1000);
 
-        String token = jwtUtils.createToken(
-                1,
-                "admin",
-                List.of("user:list", "user:delete")
-        );
+        String token = jwtUtils.createToken(1, "admin", List.of("user:list", "user:delete"));
 
         Claims claims = jwtUtils.parse(token);
 
         assertThat(claims.get("id")).isEqualTo(1);
         assertThat(claims.get("username")).isEqualTo("admin");
-        assertThat(claims.get("permissions"))
-                .isEqualTo(List.of("user:list", "user:delete"));
+        assertThat(claims.get("permissions")).isEqualTo(List.of("user:list", "user:delete"));
     }
 
     @Test
@@ -48,8 +42,7 @@ class JwtUtilsTest {
 
         String token = jwtUtils.createToken(1, "admin", List.of());
 
-        assertThatThrownBy(() -> jwtUtils.parse(token + "x"))
-                .isInstanceOf(JwtException.class);
+        assertThatThrownBy(() -> jwtUtils.parse(token + "x")).isInstanceOf(JwtException.class);
     }
 
     @Test
@@ -60,8 +53,7 @@ class JwtUtilsTest {
 
         Thread.sleep(500);
 
-        assertThatThrownBy(() -> jwtUtils.parse(token))
-                .isInstanceOf(ExpiredJwtException.class);
+        assertThatThrownBy(() -> jwtUtils.parse(token)).isInstanceOf(ExpiredJwtException.class);
     }
 
     @Test
