@@ -7,6 +7,7 @@ import com.tsang.exception.BusinessException;
 import com.tsang.mapper.UserMapper;
 import com.tsang.utils.PasswordUtils;
 import jakarta.annotation.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -39,7 +40,7 @@ public class UserServiceImpl implements UserService {
         );
 
         if (exists != null && exists > 0) {
-            throw new BusinessException("登录账号已存在");
+            throw new BusinessException(HttpStatus.CONFLICT, "登录账号已存在");
         }
 
         // 入库前先做BCrypt加密

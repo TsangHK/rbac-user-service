@@ -11,6 +11,7 @@ import com.tsang.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -51,7 +52,7 @@ public class UserController {
         User user = userService.findById(id);
 
         if (user == null) {
-            throw new BusinessException("用户不存在");
+            throw new BusinessException(HttpStatus.NOT_FOUND, "用户不存在");
         }
 
         return Result.success(user);

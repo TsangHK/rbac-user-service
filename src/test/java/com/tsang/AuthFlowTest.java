@@ -6,6 +6,7 @@ import com.tsang.controller.LoginController;
 import com.tsang.controller.UserInfoController;
 import com.tsang.controller.UserController;
 import com.tsang.entity.User;
+import com.tsang.exception.BusinessException;
 import com.tsang.exception.GlobalExceptionHandler;
 import com.tsang.interceptor.JwtInterceptor;
 import com.tsang.service.PermissionService;
@@ -15,6 +16,7 @@ import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -197,7 +199,9 @@ class AuthFlowTest {
                         .content("""
                                 {"id":1,"age":20,"username":"admin"}
                                 """))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("姓名不能为空"));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("姓名不能为空"));
     }
 
     @Test
@@ -233,7 +237,9 @@ class AuthFlowTest {
                         .content("""
                                 {"name":"张三","age":20,"username":"zhangsan"}
                                 """))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.message").value("密码不能为空"));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.message").value("密码不能为空"));
 
         verify(userService, never()).add(any(User.class));
     }
@@ -247,7 +253,8 @@ class AuthFlowTest {
                         .param("page", "1")
                         .param("size", "100000000")
                         .header("Authorization", "Bearer " + token("user:list")))
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.message").value("每页条数不能超过100"));
 
         verify(userService, never()).page(any(), any(), any(), any());
@@ -255,6 +262,8 @@ class AuthFlowTest {
 
     /**
      * 库里存在重复账号时返回明确提示
+     *
+     * 这是库里的数据异常，属于服务端问题，返回500
      */
     @Test
     void 登录时账号重复返回明确提示() throws Exception {
@@ -265,18 +274,42 @@ class AuthFlowTest {
                         .content("""
                                 {"username":"admin","password":"123456"}
                                 """))
-                .andExpect(status().isOk())
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.code").value(500))
                 .andExpect(jsonPath("$.message").value(
                         "账号数据异常：存在重复的登录账号，请联系管理员处理"));
     }
 
+    /**
+     * 用户不存在属于资源不存在，返回404
+     */
     @Test
-    void 当前用户不存在时返回明确提示() throws Exception {
+    void 当前用户不存在时返回404() throws Exception {
         when(userService.findById(1)).thenReturn(null);
 
         mvc.perform(get("/user/info")
                         .header("Authorization", "Bearer " + token()))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(404))
                 .andExpect(jsonPath("$.message").value("用户不存在或已被删除"));
+    }
+
+    /**
+     * 新增时账号已存在属于数据冲突，返回409
+     */
+    @Test
+    void 新增用户账号已存在返回409() throws Exception {
+        when(userService.add(any(User.class)))
+                .thenThrow(new BusinessException(HttpStatus.CONFLICT, "登录账号已存在"));
+
+        mvc.perform(post("/add")
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token("user:add"))
+                        .content("""
+                                {"name":"张三","age":20,"username":"admin","password":"123456"}
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(409))
+                .andExpect(jsonPath("$.message").value("登录账号已存在"));
     }
 }

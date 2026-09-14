@@ -141,6 +141,39 @@ class ApplicationIntegrationTest {
     }
 
     /**
+     * 按ID查询不存在的用户返回404（业务异常携带状态码）
+     */
+    @Test
+    void 查询不存在的用户返回404() throws Exception {
+        String token = login("admin", "123456");
+
+        mockMvc.perform(get("/find")
+                        .param("id", "999999")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value(404))
+                .andExpect(jsonPath("$.message").value("用户不存在"));
+    }
+
+    /**
+     * 新增已存在的登录账号返回409（先查重拒绝，不依赖唯一索引）
+     */
+    @Test
+    void 新增已存在的账号返回409() throws Exception {
+        String token = login("admin", "123456");
+
+        mockMvc.perform(post("/add")
+                        .contentType(APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
+                        .content("""
+                                {"name":"重复账号","age":20,"username":"admin","password":"123456"}
+                                """))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value(409))
+                .andExpect(jsonPath("$.message").value("登录账号已存在"));
+    }
+
+    /**
      * 登录并返回Token
      */
     private String login(String username, String password) throws Exception {

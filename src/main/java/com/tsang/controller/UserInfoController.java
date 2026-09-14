@@ -4,6 +4,7 @@ import com.tsang.common.Result;
 import com.tsang.entity.User;
 import com.tsang.exception.BusinessException;
 import com.tsang.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +35,7 @@ public class UserInfoController {
 
         // 用户不存在时抛出业务异常
         if (user == null) {
-            throw new BusinessException("用户不存在或已被删除");
+            throw new BusinessException(HttpStatus.NOT_FOUND, "用户不存在或已被删除");
         }
 
         return Result.success(user);
