@@ -26,7 +26,6 @@ class JwtUtilsTest {
 
     @Test
     void 创建并解析Token() {
-
         JwtUtils jwtUtils = newJwtUtils(24 * 60 * 60 * 1000);
 
         String token = jwtUtils.createToken(
@@ -45,7 +44,6 @@ class JwtUtilsTest {
 
     @Test
     void 篡改的Token解析失败() {
-
         JwtUtils jwtUtils = newJwtUtils(24 * 60 * 60 * 1000);
 
         String token = jwtUtils.createToken(1, "admin", List.of());
@@ -56,7 +54,6 @@ class JwtUtilsTest {
 
     @Test
     void 过期的Token解析失败() throws Exception {
-
         JwtUtils jwtUtils = newJwtUtils(200);
 
         String token = jwtUtils.createToken(1, "admin", List.of());
@@ -69,7 +66,6 @@ class JwtUtilsTest {
 
     @Test
     void 密钥太短时直接报错() {
-
         assertThatThrownBy(() -> new JwtProperties("short-secret", 1000))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("JWT_SECRET");

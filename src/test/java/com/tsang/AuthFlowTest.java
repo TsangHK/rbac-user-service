@@ -58,7 +58,6 @@ class AuthFlowTest {
 
     @BeforeEach
     void setUp() {
-
         openMvc = MockMvcBuilders
                 .standaloneSetup(
                         new LoginController(userService, permissionService, jwtUtils)
@@ -94,7 +93,6 @@ class AuthFlowTest {
 
     @Test
     void 登录成功返回Token和权限() throws Exception {
-
         when(userService.login("admin", "123456"))
                 .thenReturn(mockUser());
 
@@ -114,7 +112,6 @@ class AuthFlowTest {
 
     @Test
     void 登录失败返回401() throws Exception {
-
         when(userService.login(any(), any())).thenReturn(null);
 
         openMvc.perform(post("/login")
@@ -129,7 +126,6 @@ class AuthFlowTest {
 
     @Test
     void 未登录访问返回401() throws Exception {
-
         mvc.perform(get("/page")
                         .param("page", "1")
                         .param("size", "10"))
@@ -139,7 +135,6 @@ class AuthFlowTest {
 
     @Test
     void Token无效返回401() throws Exception {
-
         mvc.perform(get("/page")
                         .param("page", "1")
                         .param("size", "10")
@@ -149,7 +144,6 @@ class AuthFlowTest {
 
     @Test
     void 无权限访问返回403() throws Exception {
-
         mvc.perform(get("/page")
                         .param("page", "1")
                         .param("size", "10")
@@ -160,7 +154,6 @@ class AuthFlowTest {
 
     @Test
     void 有权限可以访问() throws Exception {
-
         when(userService.page(any(), any(), any(), any()))
                 .thenReturn(new Page<>(1, 10));
 
@@ -174,7 +167,6 @@ class AuthFlowTest {
 
     @Test
     void 有删除权限才能删除用户() throws Exception {
-
         when(userService.delete(2)).thenReturn(true);
 
         mvc.perform(delete("/delete")
@@ -185,7 +177,6 @@ class AuthFlowTest {
 
     @Test
     void 没有删除权限返回403() throws Exception {
-
         mvc.perform(delete("/delete")
                         .param("id", "2")
                         .header("Authorization", "Bearer " + token("user:list")))
@@ -194,7 +185,6 @@ class AuthFlowTest {
 
     @Test
     void 当前用户信息不返回密码() throws Exception {
-
         when(userService.findById(1)).thenReturn(mockUser());
 
         mvc.perform(get("/user/info")
@@ -206,7 +196,6 @@ class AuthFlowTest {
 
     @Test
     void 修改用户缺姓名时参数校验生效() throws Exception {
-
         mvc.perform(put("/update")
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token("user:update"))
@@ -219,7 +208,6 @@ class AuthFlowTest {
 
     @Test
     void 新增用户时密码能传入() throws Exception {
-
         when(userService.add(any(User.class))).thenReturn(true);
 
         mvc.perform(post("/add")
@@ -249,7 +237,6 @@ class AuthFlowTest {
      */
     @Test
     void 新增用户缺密码时提示校验信息() throws Exception {
-
         mvc.perform(post("/add")
                         .contentType(APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token("user:add"))
@@ -267,7 +254,6 @@ class AuthFlowTest {
      */
     @Test
     void 分页条数超上限被拦截() throws Exception {
-
         mvc.perform(get("/page")
                         .param("page", "1")
                         .param("size", "100000000")
@@ -283,7 +269,6 @@ class AuthFlowTest {
      */
     @Test
     void 登录时账号重复返回明确提示() throws Exception {
-
         when(userService.login(any(), any()))
                 .thenThrow(new TooManyResultsException("found: 2"));
 
@@ -299,7 +284,6 @@ class AuthFlowTest {
 
     @Test
     void 当前用户不存在时返回明确提示() throws Exception {
-
         when(userService.findById(1)).thenReturn(null);
 
         mvc.perform(get("/user/info")

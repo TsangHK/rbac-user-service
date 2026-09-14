@@ -37,7 +37,6 @@ public class UserController {
             @Max(value = 100, message = "每页条数不能超过100") Integer size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) Integer age) {
-
         Page<User> pageInfo = userService.page(page, size, name, age);
 
         return Result.success(pageInfo);
@@ -49,7 +48,6 @@ public class UserController {
     @RequiresPermission("user:list")
     @GetMapping("/find")
     public Result find(@RequestParam Integer id) {
-
         User user = userService.findById(id);
 
         if (user == null) {
@@ -65,7 +63,6 @@ public class UserController {
     @RequiresPermission("user:add")
     @PostMapping("/add")
     public Result add(@Valid @RequestBody UserAddDTO user) {
-
         // DTO转实体：只带允许写入的字段
         User entity = new User();
         entity.setName(user.getName());
@@ -84,7 +81,6 @@ public class UserController {
     @RequiresPermission("user:update")
     @PutMapping("/update")
     public Result update(@Valid @RequestBody UserUpdateDTO user) {
-
         // DTO转实体：只带允许修改的字段
         User entity = new User();
         entity.setId(user.getId());
@@ -103,7 +99,6 @@ public class UserController {
     @RequiresPermission("user:delete")
     @DeleteMapping("/delete")
     public Result delete(@RequestParam Integer id) {
-
         userService.delete(id);
 
         return Result.success(null);

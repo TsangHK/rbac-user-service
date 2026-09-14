@@ -1,31 +1,22 @@
 package com.tsang.config;
 
-
 import com.tsang.exception.ConfigurationException;
 import org.springframework.boot.diagnostics.AbstractFailureAnalyzer;
 import org.springframework.boot.diagnostics.FailureAnalysis;
-
 
 /**
  * 配置缺失的启动失败提示
  */
 public class ConfigurationFailureAnalyzer
         extends AbstractFailureAnalyzer<ConfigurationException> {
-
-
     @Override
     protected FailureAnalysis analyze(
             Throwable rootFailure,
             ConfigurationException cause) {
-
-
         // cause为null时不处理，交给默认逻辑
         if (cause == null) {
-
             return null;
-
         }
-
 
         return new FailureAnalysis(
                 cause.getMessage(),
@@ -40,8 +31,5 @@ public class ConfigurationFailureAnalyzer
                         详见README「配置环境变量」一节""",
                 cause
         );
-
     }
-
-
 }

@@ -11,7 +11,6 @@ class PasswordUtilsTest {
 
     @Test
     void 加密后不保留明文() {
-
         String hash = PasswordUtils.encode("123456");
 
         assertThat(hash)
@@ -21,7 +20,6 @@ class PasswordUtilsTest {
 
     @Test
     void 正确密码校验通过() {
-
         String hash = PasswordUtils.encode("123456");
 
         assertThat(PasswordUtils.matches("123456", hash))
@@ -30,7 +28,6 @@ class PasswordUtilsTest {
 
     @Test
     void 错误密码校验失败() {
-
         String hash = PasswordUtils.encode("123456");
 
         assertThat(PasswordUtils.matches("wrong", hash))

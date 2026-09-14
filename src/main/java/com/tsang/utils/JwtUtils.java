@@ -24,7 +24,6 @@ public class JwtUtils {
     private final long expirationMs;
 
     public JwtUtils(JwtProperties properties) {
-
         this.key = Keys.hmacShaKeyFor(
                 properties.secret().getBytes(StandardCharsets.UTF_8)
         );
@@ -39,7 +38,6 @@ public class JwtUtils {
             Integer id,
             String username,
             List<String> permissions) {
-
         return Jwts.builder()
                 .claim("id", id)
                 .claim("username", username)
@@ -53,7 +51,6 @@ public class JwtUtils {
      * 解析Token，签名错误或已过期会抛异常
      */
     public Claims parse(String token) {
-
         return Jwts.parser()
                 .verifyWith(key)
                 .build()

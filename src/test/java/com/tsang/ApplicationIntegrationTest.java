@@ -39,25 +39,21 @@ class ApplicationIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-
     /**
      * 保证测试跑在H2上，不会意外连到本机MySQL
      */
     @Test
     void 测试使用H2内存库() {
-
         String url = environment.getProperty("spring.datasource.url");
 
         assertThat(url).startsWith("jdbc:h2:");
     }
-
 
     /**
      * schema.sql与data.sql确实执行成功，且权限查询链路给出正确结果
      */
     @Test
     void 种子数据与权限查询链路正确() {
-
         // admin拥有全部四个权限
         assertThat(permissionService.getPermissionCodes(100))
                 .containsExactlyInAnyOrder(
@@ -76,13 +72,11 @@ class ApplicationIntegrationTest {
                 .isEmpty();
     }
 
-
     /**
      * 种子密文确实能匹配明文123456，并走通登录+鉴权+分页查询全链路
      */
     @Test
     void 种子账号可登录并访问受保护接口() throws Exception {
-
         String token = login("admin", "123456");
 
         mockMvc.perform(get("/page")
@@ -94,13 +88,11 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$.data.records").isArray());
     }
 
-
     /**
      * 普通用户只有查询权限，删除接口应返回403
      */
     @Test
     void 普通用户删除接口返回403() throws Exception {
-
         String token = login("user", "123456");
 
         mockMvc.perform(delete("/delete")
@@ -110,13 +102,11 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$.code").value(403));
     }
 
-
     /**
      * 真实上下文下登录失败返回HTTP 401
      */
     @Test
     void 登录失败返回401() throws Exception {
-
         mockMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)
                         .content("""
@@ -126,7 +116,6 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$.code").value(401));
     }
 
-
     /**
      * 访问不存在的路径返回404，而不是被兜底处理器报成"系统异常"
      *
@@ -134,7 +123,6 @@ class ApplicationIntegrationTest {
      */
     @Test
     void 访问不存在的路径返回404() throws Exception {
-
         String token = login("admin", "123456");
 
         mockMvc.perform(get("/findAll")
@@ -143,13 +131,11 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$.code").value(404));
     }
 
-
     /**
      * 请求体不是合法JSON时返回400，而不是"系统异常"
      */
     @Test
     void 请求体格式错误返回400() throws Exception {
-
         mockMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)
                         .content("{not-json"))
@@ -157,12 +143,10 @@ class ApplicationIntegrationTest {
                 .andExpect(jsonPath("$.code").value(400));
     }
 
-
     /**
      * 登录并返回Token
      */
     private String login(String username, String password) throws Exception {
-
         String body = mockMvc.perform(post("/login")
                         .contentType(APPLICATION_JSON)
                         .content("""

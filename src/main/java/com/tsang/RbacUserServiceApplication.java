@@ -5,7 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-
 /**
  * Spring Boot 项目启动入口
  */
@@ -17,5 +16,4 @@ public class RbacUserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(RbacUserServiceApplication.class, args);
     }
-
 }

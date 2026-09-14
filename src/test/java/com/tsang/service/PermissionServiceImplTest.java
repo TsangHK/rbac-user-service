@@ -40,7 +40,6 @@ class PermissionServiceImplTest {
 
     @Test
     void 多角色的权限合并返回() {
-
         // 用户同时拥有角色100和角色101
         when(userRoleMapper.selectList(any()))
                 .thenReturn(List.of(
@@ -71,7 +70,6 @@ class PermissionServiceImplTest {
 
     @Test
     void 用户没有角色时返回空() {
-
         when(userRoleMapper.selectList(any()))
                 .thenReturn(List.of());
 

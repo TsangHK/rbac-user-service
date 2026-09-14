@@ -17,7 +17,6 @@ class WebConfigTest {
 
     @Test
     void 登录接口与健康检查被放行() {
-
         InterceptorRegistry registry =
                 mock(InterceptorRegistry.class);
 

@@ -16,5 +16,4 @@ public @interface RequiresPermission {
      * 需要的权限编码，例如 user:delete
      */
     String value();
-
 }

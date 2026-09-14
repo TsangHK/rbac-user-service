@@ -1,6 +1,5 @@
 package com.tsang.exception;
 
-
 /**
  * 认证失败异常：登录账号或密码错误
  *
@@ -8,12 +7,7 @@ package com.tsang.exception;
  */
 public class UnauthorizedException extends RuntimeException {
 
-
     public UnauthorizedException(String message){
-
         super(message);
-
     }
-
-
 }

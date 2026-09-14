@@ -1,6 +1,5 @@
 package com.tsang.config;
 
-
 import com.tsang.exception.ConfigurationException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -11,7 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record JwtProperties(String secret, long expirationMs) {
 
     public JwtProperties {
-
         // 密钥至少32字符
         if (secret == null || secret.trim().length() < 32) {
             throw new ConfigurationException(

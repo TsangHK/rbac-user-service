@@ -1,6 +1,5 @@
 package com.tsang.service;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tsang.entity.User;
@@ -9,7 +8,6 @@ import com.tsang.mapper.UserMapper;
 import com.tsang.utils.PasswordUtils;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
-
 
 /**
  * 用户业务实现
@@ -21,24 +19,19 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserMapper userMapper;
 
-
     /**
      * 根据ID查询用户
      */
     @Override
     public User findById(Integer id) {
-
         return userMapper.selectById(id);
-
     }
-
 
     /**
      * 新增用户
      */
     @Override
     public boolean add(User user) {
-
         // 账号已存在直接拒绝
         Long exists = userMapper.selectCount(
                 new LambdaQueryWrapper<User>()
@@ -46,9 +39,7 @@ public class UserServiceImpl implements UserService {
         );
 
         if (exists != null && exists > 0) {
-
             throw new BusinessException("登录账号已存在");
-
         }
 
         // 入库前先做BCrypt加密
@@ -60,33 +51,25 @@ public class UserServiceImpl implements UserService {
 
         // insert返回受影响行数，大于0即成功
         return userMapper.insert(user) > 0;
-
     }
-
 
     /**
      * 修改用户，不允许修改密码
      */
     @Override
     public boolean update(User user) {
-
         user.setPassword(null);
 
         return userMapper.updateById(user) > 0;
-
     }
-
 
     /**
      * 删除用户
      */
     @Override
     public boolean delete(Integer id) {
-
         return userMapper.deleteById(id) > 0;
-
     }
-
 
     /**
      * 分页 + 条件查询
@@ -98,7 +81,6 @@ public class UserServiceImpl implements UserService {
             String name,
             Integer age
     ) {
-
         // 分页对象：当前页码 + 每页条数
         Page<User> pageInfo =
                 new Page<>(page, size);
@@ -128,9 +110,7 @@ public class UserServiceImpl implements UserService {
         );
 
         return pageInfo;
-
     }
-
 
     /**
      * 登录校验
@@ -140,7 +120,6 @@ public class UserServiceImpl implements UserService {
             String username,
             String password
     ) {
-
         // 第一步：根据用户名查询用户
         LambdaQueryWrapper<User> wrapper =
                 new LambdaQueryWrapper<>();
@@ -150,15 +129,12 @@ public class UserServiceImpl implements UserService {
                 username
         );
 
-
         User user =
                 userMapper.selectOne(wrapper);
 
         // 用户不存在
         if (user == null) {
-
             return null;
-
         }
 
         // 第二步：BCrypt校验密码
@@ -170,15 +146,10 @@ public class UserServiceImpl implements UserService {
 
         // 密码错误
         if (!result) {
-
             return null;
-
         }
 
         // 账号密码都正确
         return user;
-
     }
-
-
 }

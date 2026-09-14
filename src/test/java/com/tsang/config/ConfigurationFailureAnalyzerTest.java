@@ -16,7 +16,6 @@ class ConfigurationFailureAnalyzerTest {
 
     @Test
     void 数据库密码缺失输出说明块() {
-
         FailureAnalysis analysis = analyzer.analyze(
                 new ConfigurationException(
                         "数据库密码未配置，请通过环境变量 DB_PASSWORD 设置"));
@@ -34,7 +33,6 @@ class ConfigurationFailureAnalyzerTest {
 
     @Test
     void JWT密钥缺失输出说明块() {
-
         FailureAnalysis analysis = analyzer.analyze(
                 new ConfigurationException(
                         "JWT密钥未配置或长度不足，请通过环境变量 JWT_SECRET 设置至少32个字符的密钥"));
@@ -48,7 +46,6 @@ class ConfigurationFailureAnalyzerTest {
      */
     @Test
     void 非配置异常不处理() {
-
         assertThat(analyzer.analyze(new IllegalStateException("其它异常")))
                 .isNull();
     }

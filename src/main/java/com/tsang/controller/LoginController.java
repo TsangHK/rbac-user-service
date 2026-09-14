@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 /**
  * 登录接口：校验账号密码并签发携带权限的Token
  */
@@ -44,8 +43,6 @@ public class LoginController {
      */
     @PostMapping("/login")
     public Result login(@Valid @RequestBody LoginDTO loginDTO) {
-
-
         // 验证账号密码
         User user = userService.login(
                 loginDTO.getUsername(),
@@ -54,16 +51,12 @@ public class LoginController {
 
         // 用户不存在或密码错误，抛认证异常走真实 HTTP 401
         if (user == null) {
-
             throw new UnauthorizedException("用户名或密码错误");
-
         }
-
 
         // 查询用户权限编码
         List<String> permissions =
                 permissionService.getPermissionCodes(user.getId());
-
 
         // 生成JWT
         String token = jwtUtils.createToken(
@@ -71,7 +64,6 @@ public class LoginController {
                 user.getUsername(),
                 permissions
         );
-
 
         // 封装用户信息（不含密码）
         LoginVO.UserInfo userInfo =
@@ -81,13 +73,10 @@ public class LoginController {
                         user.getUsername()
                 );
 
-
         // 组装返回：Token + 用户信息 + 权限列表
         LoginVO loginVO =
                 new LoginVO(token, userInfo, permissions);
 
-
         return Result.success(loginVO);
-
     }
 }

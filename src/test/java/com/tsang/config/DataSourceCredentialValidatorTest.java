@@ -13,7 +13,6 @@ class DataSourceCredentialValidatorTest {
 
     @Test
     void 未配置数据库密码时启动失败() {
-
         MockEnvironment environment = new MockEnvironment();
 
         assertThatThrownBy(() ->
@@ -24,7 +23,6 @@ class DataSourceCredentialValidatorTest {
 
     @Test
     void 密码为空串时启动失败() {
-
         MockEnvironment environment = new MockEnvironment()
                 .withProperty("spring.datasource.password", "");
 
@@ -36,7 +34,6 @@ class DataSourceCredentialValidatorTest {
 
     @Test
     void 配置了密码时正常启动() {
-
         MockEnvironment environment = new MockEnvironment()
                 .withProperty("spring.datasource.password", "some-password");
 

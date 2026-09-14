@@ -32,7 +32,6 @@ class UserServiceImplTest {
 
     @Test
     void 登录成功返回用户() {
-
         User user = new User();
         user.setUsername("admin");
         user.setPassword(PasswordUtils.encode("123456"));
@@ -47,7 +46,6 @@ class UserServiceImplTest {
 
     @Test
     void 用户不存在时登录失败() {
-
         when(userMapper.selectOne(any())).thenReturn(null);
 
         assertThat(userService.login("nobody", "123456")).isNull();
@@ -55,7 +53,6 @@ class UserServiceImplTest {
 
     @Test
     void 密码错误时登录失败() {
-
         User user = new User();
         user.setUsername("admin");
         user.setPassword(PasswordUtils.encode("123456"));
@@ -67,7 +64,6 @@ class UserServiceImplTest {
 
     @Test
     void 新增用户时密码加密入库() {
-
         when(userMapper.selectCount(any())).thenReturn(0L);
         when(userMapper.insert(any(User.class))).thenReturn(1);
 
@@ -94,7 +90,6 @@ class UserServiceImplTest {
      */
     @Test
     void 新增用户时账号重复被拒绝() {
-
         when(userMapper.selectCount(any())).thenReturn(1L);
 
         User user = new User();
@@ -111,7 +106,6 @@ class UserServiceImplTest {
 
     @Test
     void 修改用户时不更新密码() {
-
         when(userMapper.updateById(any(User.class))).thenReturn(1);
 
         User user = new User();

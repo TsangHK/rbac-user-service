@@ -1,6 +1,5 @@
 package com.tsang.exception;
 
-
 import com.tsang.common.Result;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.slf4j.Logger;
@@ -19,7 +18,6 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Objects;
 
-
 /**
  * 全局异常处理器
  *
@@ -28,11 +26,9 @@ import java.util.Objects;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-
     // 日志
     private static final Logger log =
             LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
 
 
     /**
@@ -41,12 +37,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public Result businessException(
             BusinessException e){
-
-
         return Result.error(e.getMessage());
-
     }
-
 
 
     /**
@@ -55,17 +47,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<Result> unauthorizedException(
             UnauthorizedException e){
-
-
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(Result.error(
                         HttpStatus.UNAUTHORIZED.value(),
                         e.getMessage()
                 ));
-
     }
-
 
 
     /**
@@ -77,10 +65,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Result> messageNotReadableException(
             HttpMessageNotReadableException e){
-
-
         log.warn("请求体解析失败：{}", e.getMessage());
-
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
@@ -88,9 +73,7 @@ public class GlobalExceptionHandler {
                         HttpStatus.BAD_REQUEST.value(),
                         "请求体格式不正确"
                 ));
-
     }
-
 
 
     /**
@@ -99,17 +82,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<Result> noResourceFoundException(
             NoResourceFoundException e){
-
-
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(Result.error(
                         HttpStatus.NOT_FOUND.value(),
                         "接口不存在"
                 ));
-
     }
-
 
 
     /**
@@ -118,8 +97,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result validateException(
             MethodArgumentNotValidException e){
-
-
         FieldError fieldError =
                 e.getBindingResult()
                         .getFieldError();
@@ -129,11 +106,8 @@ public class GlobalExceptionHandler {
                         ? fieldError.getDefaultMessage()
                         : "参数不合法";
 
-
         return Result.error(message);
-
     }
-
 
 
     /**
@@ -142,15 +116,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public Result dataIntegrityException(
             DataIntegrityViolationException e){
-
-
         log.warn("数据完整性冲突：{}", e.getMessage());
 
-
         return Result.error("数据冲突：登录账号可能已存在");
-
     }
-
 
 
     /**
@@ -159,8 +128,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HandlerMethodValidationException.class)
     public Result requestParamException(
             HandlerMethodValidationException e){
-
-
         String message =
                 e.getAllValidationResults()
                         .stream()
@@ -171,11 +138,8 @@ public class GlobalExceptionHandler {
                         .findFirst()
                         .orElse("参数不合法");
 
-
         return Result.error(message);
-
     }
-
 
 
     /**
@@ -184,15 +148,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TooManyResultsException.class)
     public Result tooManyResultsException(
             TooManyResultsException e){
-
-
         log.error("账号存在重复数据", e);
 
-
         return Result.error("账号数据异常：存在重复的登录账号，请联系管理员处理");
-
     }
-
 
 
     /**
@@ -200,16 +159,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public Result exception(Exception e){
-
-
         // 记录日志
         log.error("系统异常", e);
 
-
         return Result.error("系统异常");
-
     }
-
-
-
 }

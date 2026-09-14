@@ -1,11 +1,9 @@
 package com.tsang.config;
 
-
 import com.tsang.interceptor.JwtInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 
 /**
  * Spring MVC配置，注册JWT拦截器
@@ -13,19 +11,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-
     // JWT拦截器
     private final JwtInterceptor jwtInterceptor;
-
 
     public WebConfig(
             JwtInterceptor jwtInterceptor
     ) {
-
         this.jwtInterceptor = jwtInterceptor;
-
     }
-
 
     /**
      * 注册拦截器
@@ -34,8 +27,6 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(
             InterceptorRegistry registry
     ) {
-
-
         registry.addInterceptor(
                         jwtInterceptor
                 )
@@ -49,8 +40,5 @@ public class WebConfig implements WebMvcConfigurer {
                         "/actuator/health",
                         "/actuator/health/**"
                 );
-
     }
-
-
 }

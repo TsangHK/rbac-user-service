@@ -1,8 +1,6 @@
 package com.tsang.common;
 
-
 import lombok.Data;
-
 
 /**
  * 统一响应结果
@@ -21,14 +19,12 @@ public class Result {
     // 返回数据，没有数据时为null
     private Object data;
 
-
     /**
      * 成功响应
      *
      * @param data 返回给前端的数据，没有则传null
      */
     public static Result success(Object data) {
-
         Result result = new Result();
 
         result.code = 200;
@@ -38,18 +34,14 @@ public class Result {
         return result;
     }
 
-
     /**
      * 失败响应
      *
      * @param message 错误提示信息
      */
     public static Result error(String message) {
-
         return error(500, message);
-
     }
-
 
     /**
      * 失败响应（自定义状态码）
@@ -58,7 +50,6 @@ public class Result {
      * @param message 错误提示信息
      */
     public static Result error(int code, String message) {
-
         Result result = new Result();
 
         result.code = code;

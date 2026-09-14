@@ -1,8 +1,6 @@
 package com.tsang.entity;
 
-
 import com.baomidou.mybatisplus.annotation.TableName;
-
 
 /**
  * 角色权限关联实体，对应数据库 role_permission 表

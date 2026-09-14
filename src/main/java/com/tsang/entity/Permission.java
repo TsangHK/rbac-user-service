@@ -1,8 +1,6 @@
 package com.tsang.entity;
 
-
 import com.baomidou.mybatisplus.annotation.TableName;
-
 
 /**
  * 权限实体，对应数据库 permission 表
@@ -75,5 +73,4 @@ public class Permission {
     public void setPath(String path) {
         this.path = path;
     }
-
 }
