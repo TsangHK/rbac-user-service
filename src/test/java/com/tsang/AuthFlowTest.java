@@ -1,5 +1,6 @@
 package com.tsang;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tsang.config.JwtProperties;
 import com.tsang.controller.LoginController;
 import com.tsang.controller.UserInfoController;
@@ -112,7 +113,7 @@ class AuthFlowTest {
     }
 
     @Test
-    void 登录失败返回统一错误() throws Exception {
+    void 登录失败返回401() throws Exception {
 
         when(userService.login(any(), any())).thenReturn(null);
 
@@ -121,15 +122,17 @@ class AuthFlowTest {
                         .content("""
                                 {"username":"admin","password":"wrong"}
                                 """))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(500))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.code").value(401))
                 .andExpect(jsonPath("$.message").value("用户名或密码错误"));
     }
 
     @Test
     void 未登录访问返回401() throws Exception {
 
-        mvc.perform(get("/findAll"))
+        mvc.perform(get("/page")
+                        .param("page", "1")
+                        .param("size", "10"))
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value(401));
     }
@@ -137,7 +140,9 @@ class AuthFlowTest {
     @Test
     void Token无效返回401() throws Exception {
 
-        mvc.perform(get("/findAll")
+        mvc.perform(get("/page")
+                        .param("page", "1")
+                        .param("size", "10")
                         .header("Authorization", "Bearer bad-token"))
                 .andExpect(status().isUnauthorized());
     }
@@ -145,7 +150,9 @@ class AuthFlowTest {
     @Test
     void 无权限访问返回403() throws Exception {
 
-        mvc.perform(get("/findAll")
+        mvc.perform(get("/page")
+                        .param("page", "1")
+                        .param("size", "10")
                         .header("Authorization", "Bearer " + token()))
                 .andExpect(status().isForbidden())
                 .andExpect(jsonPath("$.code").value(403));
@@ -154,9 +161,12 @@ class AuthFlowTest {
     @Test
     void 有权限可以访问() throws Exception {
 
-        when(userService.findAll()).thenReturn(List.of(mockUser()));
+        when(userService.page(any(), any(), any(), any()))
+                .thenReturn(new Page<>(1, 10));
 
-        mvc.perform(get("/findAll")
+        mvc.perform(get("/page")
+                        .param("page", "1")
+                        .param("size", "10")
                         .header("Authorization", "Bearer " + token("user:list")))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200));

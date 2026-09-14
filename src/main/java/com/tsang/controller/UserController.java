@@ -3,6 +3,7 @@ package com.tsang.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tsang.annotation.RequiresPermission;
 import com.tsang.common.Result;
+import com.tsang.dto.UserAddDTO;
 import com.tsang.dto.UserUpdateDTO;
 import com.tsang.entity.User;
 import com.tsang.exception.BusinessException;
@@ -11,8 +12,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 用户管理接口，通过 @RequiresPermission 声明所需权限编码
@@ -24,16 +23,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    /**
-     * 查询全部用户
-     */
-    @RequiresPermission("user:list")
-    @GetMapping("/findAll")
-    public Result findAll() {
-        List<User> list = userService.findAll();
-        return Result.success(list);
     }
 
     /**
@@ -71,13 +60,20 @@ public class UserController {
     }
 
     /**
-     * 新增用户，@Valid 触发实体上的校验注解
+     * 新增用户，入参 UserAddDTO，@Valid 触发DTO上的校验注解
      */
     @RequiresPermission("user:add")
     @PostMapping("/add")
-    public Result add(@Valid @RequestBody User user) {
+    public Result add(@Valid @RequestBody UserAddDTO user) {
 
-        userService.add(user);
+        // DTO转实体：只带允许写入的字段
+        User entity = new User();
+        entity.setName(user.getName());
+        entity.setAge(user.getAge());
+        entity.setUsername(user.getUsername());
+        entity.setPassword(user.getPassword());
+
+        userService.add(entity);
 
         return Result.success(null);
     }

@@ -3,19 +3,10 @@ package com.tsang.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tsang.entity.User;
 
-import java.util.List;
-
 /**
  * 用户业务接口
  */
 public interface UserService {
-
-    /**
-     * 查询全部用户
-     *
-     * @return 用户列表
-     */
-    List<User> findAll();
 
     /**
      * 根据ID查询用户

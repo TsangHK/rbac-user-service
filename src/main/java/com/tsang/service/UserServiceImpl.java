@@ -11,9 +11,6 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 
-import java.util.List;
-
-
 /**
  * 用户业务实现
  */
@@ -23,18 +20,6 @@ public class UserServiceImpl implements UserService {
     // 用户数据库操作
     @Resource
     private UserMapper userMapper;
-
-
-    /**
-     * 查询全部用户
-     */
-    @Override
-    public List<User> findAll() {
-
-        // 传null表示不加任何WHERE条件
-        return userMapper.selectList(null);
-
-    }
 
 
     /**

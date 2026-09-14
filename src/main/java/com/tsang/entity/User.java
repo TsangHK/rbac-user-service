@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 
 
 /**
@@ -23,23 +21,19 @@ public class User {
 
 
     // 用户姓名
-    @NotBlank(message = "姓名不能为空")
     private String name;
 
 
     // 用户年龄
-    @Positive(message = "年龄必须大于0")
     private Integer age;
 
 
     // 登录账号
-    @NotBlank(message = "登录账号不能为空")
     private String username;
 
 
-    // 登录密码，不返回给前端
+    // 登录密码，只写不读：入参能收到，响应不输出
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank(message = "密码不能为空")
     private String password;
 
 

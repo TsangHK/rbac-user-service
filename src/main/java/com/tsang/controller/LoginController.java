@@ -3,6 +3,7 @@ package com.tsang.controller;
 import com.tsang.common.Result;
 import com.tsang.dto.LoginDTO;
 import com.tsang.entity.User;
+import com.tsang.exception.UnauthorizedException;
 import com.tsang.service.PermissionService;
 import com.tsang.service.UserService;
 import com.tsang.utils.JwtUtils;
@@ -51,10 +52,10 @@ public class LoginController {
                 loginDTO.getPassword()
         );
 
-        // 用户不存在或密码错误
+        // 用户不存在或密码错误，抛认证异常走真实 HTTP 401
         if (user == null) {
 
-            return Result.error("用户名或密码错误");
+            throw new UnauthorizedException("用户名或密码错误");
 
         }
 

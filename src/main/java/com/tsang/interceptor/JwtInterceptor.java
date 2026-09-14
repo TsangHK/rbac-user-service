@@ -46,14 +46,6 @@ public class JwtInterceptor implements HandlerInterceptor {
     ) throws Exception {
 
 
-        // 放行跨域预检请求
-        if (request.getMethod().equals("OPTIONS")) {
-
-            return true;
-
-        }
-
-
         // 获取Token
         String token =
                 request.getHeader("Authorization");

@@ -13,7 +13,7 @@ INSERT IGNORE INTO `role` (`id`, `name`, `code`) VALUES
 
 -- 权限
 INSERT IGNORE INTO `permission` (`id`, `name`, `code`, `type`, `parent_id`, `path`) VALUES
-(100, '查询用户', 'user:list',   2, 0, '/findAll'),
+(100, '查询用户', 'user:list',   2, 0, '/page'),
 (101, '新增用户', 'user:add',    2, 0, '/add'),
 (102, '修改用户', 'user:update', 2, 0, '/update'),
 (103, '删除用户', 'user:delete', 2, 0, '/delete');

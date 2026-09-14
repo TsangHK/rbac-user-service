@@ -7,11 +7,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.Objects;
 
@@ -40,6 +44,69 @@ public class GlobalExceptionHandler {
 
 
         return Result.error(e.getMessage());
+
+    }
+
+
+
+    /**
+     * 处理认证失败异常，返回真实的 HTTP 401
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Result> unauthorizedException(
+            UnauthorizedException e){
+
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Result.error(
+                        HttpStatus.UNAUTHORIZED.value(),
+                        e.getMessage()
+                ));
+
+    }
+
+
+
+    /**
+     * 处理请求体无法解析（JSON格式错误、编码不对等）
+     *
+     * 不加这个处理器会落到下面的兜底分支，被报成"系统异常"+HTTP 200，
+     * 把客户端的错误伪装成服务端故障
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Result> messageNotReadableException(
+            HttpMessageNotReadableException e){
+
+
+        log.warn("请求体解析失败：{}", e.getMessage());
+
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Result.error(
+                        HttpStatus.BAD_REQUEST.value(),
+                        "请求体格式不正确"
+                ));
+
+    }
+
+
+
+    /**
+     * 处理访问不存在的路径，返回真实的 HTTP 404
+     */
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Result> noResourceFoundException(
+            NoResourceFoundException e){
+
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Result.error(
+                        HttpStatus.NOT_FOUND.value(),
+                        "接口不存在"
+                ));
 
     }
 
