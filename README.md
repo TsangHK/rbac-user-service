@@ -11,6 +11,7 @@ Spring Boot 后端示例项目：用户管理 + JWT 登录 + RBAC 权限控制�
 | 数据库 | MySQL 8 |
 | 认证 | JWT（jjwt 0.12），权限基于 RBAC（用户-角色-权限） |
 | 密码 | BCrypt（spring-security-crypto） |
+| 样板代码 | Lombok（数据类统一 `@Getter` / `@Setter`） |
 
 ## 功能
 
@@ -165,6 +166,7 @@ curl -X DELETE "http://localhost:8080/delete?id=1" -H "Authorization: Bearer <us
 ## 安全说明与已知限制
 
 - JWT 无状态、无法服务端吊销，登出靠前端删除 Token；如需强制下线要引入 Redis 黑名单
+- 数据类统一用 Lombok 的 `@Getter` / `@Setter`，刻意不用 `@Data`：`User`、`LoginDTO`、`UserAddDTO` 三个类带密码字段，`@Data` 生成的 `toString` 一旦被日志打印就会把明文或密文密码带出去；同时 `@Data` 生成的全字段 `equals` 对实体也没有意义
 - Token 中的权限在登录时固化，后台改权限后需重新登录才生效；Token 有效期内即使账号被删或权限被撤，`@RequiresPermission` 的校验仍会通过（只有 `/user/info` 因为会查库才发现账号已不存在）
 - 接口错误分两类约定，前端需要按两种方式判断：
   - **HTTP 层错误使用真实状态码**：`401`（登录失败、未登录、Token 无效）、`403`（权限不足）、`404`（路径不存在）、`400`（请求体不是合法 JSON）

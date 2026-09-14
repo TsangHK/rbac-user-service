@@ -1,10 +1,14 @@
 package com.tsang.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 角色权限关联实体，对应数据库 role_permission 表
  */
+@Getter
+@Setter
 @TableName("role_permission")
 public class RolePermission {
 
@@ -16,28 +20,4 @@ public class RolePermission {
 
     // 权限ID
     private Integer permissionId;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public Integer getPermissionId() {
-        return permissionId;
-    }
-
-    public void setPermissionId(Integer permissionId) {
-        this.permissionId = permissionId;
-    }
 }

@@ -1,13 +1,13 @@
 package com.tsang.common;
 
-import lombok.Data;
+import lombok.Getter;
 
 /**
  * 统一响应结果
  * <p>
  * code取值约定：200成功、500业务或系统异常、401未登录/Token无效、403权限不足
  */
-@Data
+@Getter
 public class Result {
 
     // 状态码
@@ -26,11 +26,9 @@ public class Result {
      */
     public static Result success(Object data) {
         Result result = new Result();
-
         result.code = 200;
         result.message = "操作成功";
         result.data = data;
-
         return result;
     }
 
@@ -51,10 +49,8 @@ public class Result {
      */
     public static Result error(int code, String message) {
         Result result = new Result();
-
         result.code = code;
         result.message = message;
-
         return result;
     }
 }

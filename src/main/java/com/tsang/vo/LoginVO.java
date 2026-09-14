@@ -1,10 +1,15 @@
 package com.tsang.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
  * 登录返回对象：token、用户信息、权限列表
  */
+@Getter
+@Setter
 public class LoginVO {
 
     // JWT Token
@@ -18,39 +23,14 @@ public class LoginVO {
 
     public LoginVO(String token, UserInfo userInfo, List<String> permissions) {
         this.token = token;
-
         this.userInfo = userInfo;
-
-        this.permissions = permissions;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public UserInfo getUserInfo() {
-        return userInfo;
-    }
-
-    public void setUserInfo(UserInfo userInfo) {
-        this.userInfo = userInfo;
-    }
-
-    public List<String> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
     }
 
     /**
      * 用户信息内部类，不含密码
      */
+    @Getter
     public static class UserInfo {
 
         // 用户ID
@@ -64,22 +44,8 @@ public class LoginVO {
 
         public UserInfo(Integer id, String name, String username) {
             this.id = id;
-
             this.name = name;
-
             this.username = username;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getUsername() {
-            return username;
         }
     }
 }
